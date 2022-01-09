@@ -7,4 +7,4 @@ from ..forms import CommunityEngagementQuestionnaireForm
 class CommunityEngagementAdmin(admin.ModelAdmin):
     
     form = CommunityEngagementQuestionnaireForm
-    fields = ['gender','report_datetime']
+    # fields = ['gender','report_datetime']

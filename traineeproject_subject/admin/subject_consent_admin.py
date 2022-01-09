@@ -7,4 +7,32 @@ from ..forms import SubjectConsentForm
 class SubjectConsentAdmin(admin.ModelAdmin):
     
     form = SubjectConsentForm
-    fields = ['gender','report_datetime']
+    fieldsets = (
+        (None, {
+            'fields': (
+                'screening_identifier',
+                'subject_identifier',
+                'consent_datetime',
+                'first_name',
+                'last_name',
+                'initials',
+                'gender',
+                'date_of_birth',
+                'is_dob_estimated',
+                'identity',
+                'confirm_identity',
+                'identity_type',
+
+            ),
+        }),
+    )
+
+    search_fields = ('subject_identifier',)
+
+    radio_fields = {
+        'gender': admin.VERTICAL,
+        'is_dob_estimated': admin.VERTICAL,
+        'identity_type': admin.VERTICAL
+    }
+
+    readonly_fields = ('subject_identifier',)
