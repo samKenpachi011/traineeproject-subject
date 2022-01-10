@@ -52,7 +52,13 @@ INSTALLED_APPS = [
     'edc_consent.apps.AppConfig',
     'edc_protocol.apps.AppConfig',
     'edc_registration.apps.AppConfig',
+    'edc_appointment.apps.AppConfig',
     'edc_visit_schedule.apps.AppConfig',
+    'edc_reference.apps.AppConfig',
+    'edc_timepoint.apps.AppConfig',
+    'edc_metadata.apps.AppConfig',
+    'edc_metadata_rules.apps.AppConfig',
+    
     
     
 ]
@@ -140,3 +146,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DASHBOARD_URL_NAMES = {}

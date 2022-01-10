@@ -19,6 +19,8 @@ from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.managers import ConsentManager
 from edc_consent.field_mixins import IdentityFieldsMixin,IdentityFieldsMixinError
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
+from edc_consent.validators import eligible_if_yes, FullNameValidator
+
 
 class SubjectScreeningError(Exception):
     pass
@@ -82,7 +84,7 @@ class SubjectConsent(
 
     witness_name = LastnameField(
         verbose_name='Witness\'s last and first name',
-        # validators=[FullNameValidator()],
+        validators=[FullNameValidator()],
         blank=True,
         null=True,
         help_text=mark_safe(
@@ -147,7 +149,7 @@ class SubjectConsent(
         max_length=3,
         verbose_name='Do you consent to participate in the study?',
         choices=YES_NO,    
-        # validators=[eligible_if_yes, ],
+        validators=[eligible_if_yes, ],
         help_text='Participant is not eligible if no',
         default=NO)    
 

@@ -1,6 +1,8 @@
 from django.utils.translation import ugettext_lazy as _
 from .constants import DWTA
 from edc_constants.constants import OTHER, MALE, FEMALE, NONE,NOT_APPLICABLE
+from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
+from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
 
 GENDER_OTHER = (
     (MALE, _('Male')),
@@ -132,4 +134,23 @@ DATE_ESTIMATED_NA = (
     ('D', 'Yes, estimated the Day'),
     ('MD', 'Yes, estimated Month and Day'),
     ('YMD', 'Yes, estimated Year, Month and Day'),
+)
+
+# Subject Visit
+VISIT_INFO_SOURCE = (
+    ('clinic_visit_w_subject', 'Clinic visit with participant'),
+    ('other_contact_w_subject',
+     'Other contact with participant (i.e telephone call)'),
+    ('contact_w_health_worker', 'Contact with health care worker'),
+    ('Contact_w_family_design',
+     'Contact with family or designated person who can provide information'),
+    (OTHER, 'Other,specify'),
+)
+
+VISIT_REASON = (
+    (SCHEDULED, 'Scheduled visit/contact'),
+    (MISSED_VISIT, 'Did not attend scheduled visit'),
+    (UNSCHEDULED, 'Unscheduled visit/contact'),
+    (LOST_VISIT, 'Use only when withdrawing subject off study'),
+    (COMPLETED_PROTOCOL_VISIT, 'Subject has completed the study'),
 )
