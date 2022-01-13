@@ -3,6 +3,7 @@ from .constants import DWTA
 from edc_constants.constants import OTHER, MALE, FEMALE, NONE,NOT_APPLICABLE
 from edc_visit_tracking.constants import MISSED_VISIT, COMPLETED_PROTOCOL_VISIT
 from edc_visit_tracking.constants import SCHEDULED, UNSCHEDULED, LOST_VISIT
+from edc_lab.choices import TUBE
 
 GENDER_OTHER = (
     (MALE, _('Male')),
@@ -153,4 +154,38 @@ VISIT_REASON = (
     (UNSCHEDULED, 'Unscheduled visit/contact'),
     (LOST_VISIT, 'Use only when withdrawing subject off study'),
     (COMPLETED_PROTOCOL_VISIT, 'Subject has completed the study'),
+)
+
+# Requisition
+
+HUBS = (
+    ('greater_francistown', 'Greater Francistown'),
+    ('greater_gaborone', 'Greater Gaborone'),
+    ('ngami', 'Ngami'),
+    ('greater_selibe_phikwe', 'Greater Selibe Phikwe'),
+    ('serowe_or_palapye', 'Serowe/Palapye')
+)
+
+ITEM_TYPE = (
+    (NOT_APPLICABLE, 'Not applicable'),
+    (TUBE, 'Tube'),
+    ('swab', 'Swab'),
+    (OTHER, 'Other'),
+)
+
+PRIORITY = (
+    ('normal', 'Normal'),
+    ('urgent', 'Urgent'),
+)
+
+REASON_NOT_DRAWN = (
+    ('not_collected', 'Not collected'),
+    ('not_required', 'Not required at this visit'),
+    ('measurement_skipped', 'Measurement skipped at this visit'),
+    ('subject_refused', 'Subject refused'),
+    ('equipment_malfunction', 'Equipment malfunction'),
+    ('staff_unavailable', 'Staff unavailable'),
+    ('no_further_information', 'No further information'),
+    (OTHER, 'Other, specify'),
+    (NOT_APPLICABLE, 'Not applicable'),
 )

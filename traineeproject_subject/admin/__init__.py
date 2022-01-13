@@ -2,5 +2,5 @@ from .screening_eligibility_admin import ScreeningEligibilityAdmin
 from .subject_community_engagement_admin import CommunityEngagementAdmin
 from .subject_consent_admin import SubjectConsentAdmin
 from .subject_education_admin import EducationQuestionnaireAdmin
-from .subject_requisition import SubjectRequisitionAdmin
+from .subject_requisition_admin import SubjectRequisitionAdmin
 from .subject_visit_admin import SubjectVisitAdmin

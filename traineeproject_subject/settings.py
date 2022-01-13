@@ -58,8 +58,8 @@ INSTALLED_APPS = [
     'edc_timepoint.apps.AppConfig',
     'edc_metadata.apps.AppConfig',
     'edc_metadata_rules.apps.AppConfig',
-    
-    
+    'edc_lab.apps.AppConfig',
+    'traineeproject_validation.apps.AppConfig',
     
 ]
 
