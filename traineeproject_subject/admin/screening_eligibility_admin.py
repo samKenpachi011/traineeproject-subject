@@ -4,8 +4,6 @@ from ..forms import ScreeningEligibilityForm
 from ..models import ScreeningEligibility
 from ..admin_site import traineeproject_subject_admin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
-
-
 @admin.register(ScreeningEligibility, site=traineeproject_subject_admin)
 class ScreeningEligibilityAdmin(admin.ModelAdmin):
 

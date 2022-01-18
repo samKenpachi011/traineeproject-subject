@@ -4,3 +4,4 @@ from .subject_consent_form import SubjectConsentForm
 from .subject_education_form import EducationQuestionnaireForm
 from .subject_requisition_form import SubjectRequisitionForm
 from .subject_visit_form import SubjectVisitForm
+from .subject_demographic_form import DemographicQuetionnaireForm

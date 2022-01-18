@@ -36,7 +36,6 @@ ETC_DIR= '/etc/'
 AUTO_CREATE_KEYS=False
 
 INSTALLED_APPS = [
-    'traineeproject_subject.apps.TPSConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -60,6 +59,8 @@ INSTALLED_APPS = [
     'edc_metadata_rules.apps.AppConfig',
     'edc_lab.apps.AppConfig',
     'traineeproject_validation.apps.AppConfig',
+    'traineeproject_subject.apps.EdcVisitTrackingAppConfig',
+    'traineeproject_subject.apps.AppConfig',
     
 ]
 

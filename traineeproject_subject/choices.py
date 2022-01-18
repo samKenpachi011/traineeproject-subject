@@ -189,3 +189,32 @@ REASON_NOT_DRAWN = (
     (OTHER, 'Other, specify'),
     (NOT_APPLICABLE, 'Not applicable'),
 )
+
+# Demographic Data
+ETHNICITY = (
+    ('Black African', 'Black African'),
+    ('Caucasian', 'Caucasian'),
+    ('Asian', 'Asian'),
+    (OTHER, 'Other, specify'),)
+
+HIGHEST_EDUCATION = (
+    ('None', 'None'),
+    ('Primary', 'Primary'),
+    ('Junior Secondary', 'Junior Secondary'),
+    ('Senior Secondary', 'Senior Secondary'),
+    ('Tertiary', 'Tertiary'),)
+
+SETTLEMENT_TYPE = (
+    ('urban', 'Urban'),
+    ('rural', 'Rural'),
+)        
+
+EMPLOYMENT_STATUS = (
+    ('formal-wage_employment_part_time', 'Formal wage employment (Part-time)'),
+    ('formal_wage_employment-full_time)',
+     'Formal wage employment (full-time)'),
+    ('self_employed_full_time)', 'Self-employed (full time)'),
+    ('self_employed_part_time)', 'Self-employed (part time)'),
+    ('adhoc_work', 'Ad-hoc work'),
+    ('Seasonal_employment', 'Seasonal employment'),
+    (OTHER, 'Other (specify)'),)
