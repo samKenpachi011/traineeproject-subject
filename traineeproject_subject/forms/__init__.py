@@ -5,3 +5,4 @@ from .subject_education_form import EducationQuestionnaireForm
 from .subject_requisition_form import SubjectRequisitionForm
 from .subject_visit_form import SubjectVisitForm
 from .subject_demographic_form import DemographicQuetionnaireForm
+from .subject_personal_contact_info_form import PersonalContactInfoForm

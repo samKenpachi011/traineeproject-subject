@@ -6,3 +6,4 @@ from .subject_education import EducationQuestionnaire
 from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_demographic import SubjectDemographicsQuestionnaire
+from .subject_personal_contact_info import PersonalContactInfo

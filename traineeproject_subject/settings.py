@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'django_extensions',
     'django_crypto_fields.apps.AppConfig',
+    'edc_action_item.apps.AppConfig',
     'edc_identifier.apps.AppConfig', 
     'edc_base.apps.AppConfig', 
     'edc_device.apps.AppConfig',
@@ -72,6 +73,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'edc_subject_dashboard.middleware.DashboardMiddleware',
 ]
 
 ROOT_URLCONF = 'traineeproject_subject.urls'
