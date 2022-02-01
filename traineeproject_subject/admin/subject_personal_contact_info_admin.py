@@ -1,5 +1,3 @@
-from curses import ungetmouse
-from operator import imod
 from django.contrib import admin
 
 from edc_model_admin import audit_fieldset_tuple
@@ -9,10 +7,12 @@ from ..models import PersonalContactInfo
 from ..forms import PersonalContactInfoForm
 
 @admin.register(PersonalContactInfo, site=traineeproject_subject_admin)
-class PersonalContactInfoAdmin(ModelAdminMixin,admin.ModelAdmin):
+class PersonalContactInfoAdmin(ModelAdminMixin, admin.ModelAdmin):
     form = PersonalContactInfoForm
-    fieldsets = ((None,{
-        'fields':(
+
+    fieldsets = (
+        (None,{
+        'fields':[
                 'subject_identifier',
                 'report_datetime',
                 'date_signed',
@@ -25,17 +25,17 @@ class PersonalContactInfoAdmin(ModelAdminMixin,admin.ModelAdmin):
                 'subject_phone_alt',
                 'may_call_work',
                 'subject_work_place',
-                'subject_work_phone',)
+                'subject_work_phone',]
     }),(
         'Emergency Contact Details', {
-            'fields': (
+            'fields': [
                 'may_contact_indirectly',
                 'indirect_contact_name',
                 'indirect_contact_relation',
                 'indirect_contact_physical_address',
                 'indirect_contact_cell',
                 'indirect_contact_phone',
-            ),
+            ],
         }),audit_fieldset_tuple)
 
 
@@ -57,5 +57,4 @@ class PersonalContactInfoAdmin(ModelAdminMixin,admin.ModelAdmin):
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
-
 
