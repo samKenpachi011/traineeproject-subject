@@ -78,7 +78,6 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
         max_length=5,
         choices=YES_NO,)    
 
-
     is_eligible = models.BooleanField(
         default=False,
         editable=False)
@@ -87,7 +86,11 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
         max_length=150,
         verbose_name="Reason for ineligibility",
         null=True,
-        editable=False)    
+        editable=False)  
+          
+    is_consented = models.BooleanField(
+        default=False,
+        editable=False)
 
     history = HistoricalRecords()
     objects = ScreeningEligibilityManager() 

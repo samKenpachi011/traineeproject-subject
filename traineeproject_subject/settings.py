@@ -24,7 +24,7 @@ ALLOWED_HOSTS = []
 APP_NAME = 'traineeproject_subject'
 SITE_ID = 1
 DEVICE_ID =99
-REVIEWER_SITE_ID = 0
+REVIEWER_SITE_ID = 1
 # ETC
 ETC_DIR= '/etc/'
 
@@ -58,11 +58,16 @@ INSTALLED_APPS = [
     'edc_metadata.apps.AppConfig',
     'edc_metadata_rules.apps.AppConfig',
     'edc_lab.apps.AppConfig',
+    'edc_timepoint.apps.AppConfig',
     'traineeproject_validation.apps.AppConfig',
     'traineeproject_subject.apps.EdcAppointmentAppConfig',
     'traineeproject_subject.apps.EdcProtocolAppConfig',
     'traineeproject_subject.apps.EdcVisitTrackingAppConfig',
     'traineeproject_subject.apps.AppConfig',
+    'traineeeproject_prn.apps.AppConfig',
+    'traineeproject_visit_schedule.apps.AppConfig',
+
+
     
 ]
 
@@ -73,6 +78,7 @@ MIDDLEWARE = [
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'django.contrib.sites.middleware.CurrentSiteMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'edc_dashboard.middleware.DashboardMiddleware',
     'edc_subject_dashboard.middleware.DashboardMiddleware',
@@ -146,6 +152,7 @@ DASHBOARD_URL_NAMES = {
     'screening_listboard_url': 'traineeproject_dashboard:screening_listboard_url',
     'subject_listboard_url': 'traineeproject_dashboard:subject_listboard_url',
     'subject_dashboard_url': 'traineeproject_dashboard:subject_dashboard_url',
+    
 }
 
 # Static files (CSS, JavaScript, Images)

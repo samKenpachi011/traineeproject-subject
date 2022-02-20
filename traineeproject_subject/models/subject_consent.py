@@ -167,10 +167,10 @@ class SubjectConsent(
     history = HistoricalRecords()    
 
     def __str__(self):
-        return f'{self.subject_identifier}'
+        return f'{self.subject_identifier}  V{self.version}'
 
     def natural_key(self):
-        return (self.subject_identifier, self.version,)    
+        return (self.subject_identifier, self.version)   
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
@@ -178,46 +178,45 @@ class SubjectConsent(
                        'first_name', 'last_name'])
         return fields 
 
-    # def get_subject_screening(self):
-    #     """Returns the subject screening model instance.
-    #     Instance must exist since SubjectScreening is completed
-    #     before consent.
-    #     """
-    #     model_cls = django_apps.get_model(self.subject_screening_model)
-    #     return model_cls.objects.get(
-    #         screening_identifier=self.screening_identifier)
-
     def save(self, *args, **kwargs):
+        self.version = '1'  
         super().save(*args, **kwargs)
 
-        screening_cls = django_apps.get_model(self.subject_screening_model)
-        try:
-            screening_obj = screening_cls.objects.get(
-                screening_identifier=self.screening_identifier)
-        except screening_cls.DoesNotExist:
-            raise SubjectScreeningError('Missing subject screening object for participant'
-                                        f'{self.subject_identifier}')
-        else:
-            screening_obj.age_in_years = age(self.dob, get_utcnow())
-            screening_obj.save()
-        self.subject_type = 'subject'
-        self.version = '1'  
+        # screening_cls = django_apps.get_model(self.subject_screening_model)
+        # try:
+        #     screening_obj = screening_cls.objects.get(
+        #         screening_identifier=self.screening_identifier)
+        # except screening_cls.DoesNotExist:
+        #     raise SubjectScreeningError('Missing subject screening object for participant'
+        #                                 f'{self.subject_identifier}')
+        # else:
+        #     screening_obj.age_in_years = age(self.dob, get_utcnow())
+        #     screening_obj.save()
+        # self.subject_type = 'subject'
+        
 
-    # def make_new_identifier(self):
-    #     """Returns a new and unique identifier.
-    #     Override this if needed. Can be inherited from NonUniqueSubjectIdentifierModelMixin
-    #     """
-    #     subject_identifier = SubjectIdentifier(
-    #         identifier_type='subject',
-    #         requesting_model=self._meta.label_lower,
-    #         site=self.site)
-    #     return subject_identifier.identifier     
+    def make_new_identifier(self):
+        """Returns a new and unique identifier.
+        Override this if needed. Can be inherited from NonUniqueSubjectIdentifierModelMixin
+        """
+        subject_identifier = SubjectIdentifier(
+            identifier_type='subject',
+            requesting_model=self._meta.label_lower,
+            site=self.site)
+        return subject_identifier.identifier     
 
+
+    @property
+    def consent_version(self):
+        return self.version
+    
     class Meta(ConsentModelMixin.Meta):
         app_label = 'traineeproject_subject'
         verbose_name = 'Subject Consent'
         verbose_name_plural = 'Subject Consent'
         get_latest_by = 'consent_datetime'
-        unique_together = (('subject_identifier', 'version'),
-                           ('first_name', 'date_of_birth', 'initials', 'version'))
+        unique_together = (
+            ('subject_identifier', 'version'),                       
+            ('subject_identifier', 'screening_identifier', 'version'),
+            ('first_name', 'date_of_birth', 'initials', 'version'))
         ordering = ('-created',)
