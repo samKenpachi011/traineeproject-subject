@@ -2,7 +2,8 @@ from django.db import models
 from django.apps import apps as django_apps
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
-from ..choices import GENDER_OTHER, MARITAL_STATUS,LIVING_WITH,LANGUAGES, IDENTITY_TYPE,DATE_ESTIMATED, DATE_ESTIMATED_NA
+from ..choices import (GENDER_OTHER, MARITAL_STATUS,LIVING_WITH,LANGUAGES, 
+                       IDENTITY_TYPE,DATE_ESTIMATED, DATE_ESTIMATED_NA)
 from .model_mixins import SearchSlugModelMixin
 from ..subject_identifier import SubjectIdentifier
 from edc_base.model_managers import HistoricalRecords
@@ -20,6 +21,7 @@ from edc_consent.managers import ConsentManager
 from edc_consent.field_mixins import IdentityFieldsMixin,IdentityFieldsMixinError
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_consent.validators import eligible_if_yes, FullNameValidator
+from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 
 
 class SubjectScreeningError(Exception):
@@ -31,7 +33,8 @@ class SubjectConsentManager(SearchSlugManager,models.Manager):
         
 
 class SubjectConsent(
-        ConsentModelMixin,SiteModelMixin,NonUniqueSubjectIdentifierModelMixin,IdentityFieldsMixin,
+        ConsentModelMixin,SiteModelMixin,
+        UpdatesOrCreatesRegistrationModelMixin,NonUniqueSubjectIdentifierModelMixin,IdentityFieldsMixin,
         SearchSlugModelMixin,BaseUuidModel):
 
     subject_screening_model = 'traineeproject_subject.screening_eligibility'    
@@ -42,8 +45,7 @@ class SubjectConsent(
 
     # Demographic Details
 
-    # Consent Details
-
+ 
     first_name = FirstnameField(
         null=True, blank=False)
 
@@ -124,10 +126,13 @@ class SubjectConsent(
         )  
 
     partner_count = models.PositiveIntegerField(
-        verbose_name='Who do you currently live with?')
+        verbose_name='Number of Partners?',
+        null=True
+        )
 
     currently_living_with = models.CharField(
         max_length=20,
+        verbose_name='Who do you currently live with?',
         choices=LIVING_WITH,
         default='---------')
 

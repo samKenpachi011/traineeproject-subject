@@ -22,6 +22,11 @@ class SubjectConsentAdmin(admin.ModelAdmin):
                 'identity',
                 'confirm_identity',
                 'identity_type',
+                'marital_status',
+                'partner_count',
+                'currently_living_with',
+                'consent_to_participate',
+                'consent_to_optional_sample_collection',
 
             ),
         }),
