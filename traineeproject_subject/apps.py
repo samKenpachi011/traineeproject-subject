@@ -7,6 +7,17 @@ class AppConfig(DjangoAppConfig):
     name = 'traineeproject_subject'
     verbose_name = 'Trainee Subject CRFs'
     admin_site_name = 'traineeproject_subject_admin'
+    
+    form_versions = {
+        'traineeproject_subject.subjectvisit': 1.0,
+        'traineeproject_subject.subjectrequisition': 1.0,
+        'traineeproject_subject.subjectpersonalcontractinfo': 1.0,
+        'traineeproject_subject.subjecteducation': 1.0,
+        'traineeproject_subject.subjectdemographic': 1.0,
+        'traineeproject_subject.subjectcommunityengagement': 1.0,
+        'traineeproject_subject.screeningeligibility': 1.0,
+        'traineeproject_subject.consent': 1.0,
+    }
 
 if settings.APP_NAME == 'traineeproject_subject':
     from edc_appointment.appointment_config import AppointmentConfig
