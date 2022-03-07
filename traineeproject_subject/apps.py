@@ -2,6 +2,10 @@ from django.apps import AppConfig as DjangoAppConfig
 from django.conf import settings
 from datetime import datetime
 from dateutil.tz import gettz
+from edc_visit_tracking.constants import (SCHEDULED, UNSCHEDULED, LOST_VISIT,
+                                          MISSED_VISIT, COMPLETED_PROTOCOL_VISIT)
+from edc_constants.constants import FAILED_ELIGIBILITY
+
 class AppConfig(DjangoAppConfig):
     app_label = 'traineeproject_subject'
     name = 'traineeproject_subject'
@@ -22,9 +26,10 @@ class AppConfig(DjangoAppConfig):
 if settings.APP_NAME == 'traineeproject_subject':
     from edc_appointment.appointment_config import AppointmentConfig
     from edc_appointment.apps import AppConfig as BaseEdcAppointmentAppConfig
+    from edc_appointment.constants import COMPLETE_APPT
+    from edc_metadata.apps import AppConfig as BaseEdcMetadataAppConfig
     from edc_visit_tracking.apps import AppConfig as BaseEdcVisitTrackingAppConfig
     from edc_protocol.apps import AppConfig as BaseEdcProtocolAppConfig
-    from edc_appointment.constants import COMPLETE_APPT
     from edc_timepoint.apps import AppConfig as BaseEdcTimepointAppConfig
     from edc_timepoint.timepoint import Timepoint
     from edc_timepoint.timepoint_collection import TimepointCollection
@@ -51,11 +56,12 @@ if settings.APP_NAME == 'traineeproject_subject':
             2025, 12, 1, 0, 0, 0, tzinfo=gettz('UTC'))
 
     class EdcAppointmentAppConfig(BaseEdcAppointmentAppConfig):
-        default_appt_type = 'clinic'
+       
         configurations = [
             AppointmentConfig(
                 model='edc_appointment.appointment',
-                related_visit_model='traineeproject_subject.subjectvisit')
+                related_visit_model='traineeproject_subject.subjectvisit',
+                 appt_type = 'clinic'),
         ]  
         
     class EdcTimepointAppConfig(BaseEdcTimepointAppConfig):
@@ -77,6 +83,11 @@ if settings.APP_NAME == 'traineeproject_subject':
         report_datetime_allowance = -1
         visit_models = {
             'traineeproject_subject': ('subject_visit', 'traineeproject_subject.subjectvisit'), }    
+        
+    class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
+        reason_field = {'training_subject.subjectvisit': 'reason'}
+        create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
+        delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]    
         
              
 

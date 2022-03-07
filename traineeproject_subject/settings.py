@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     'traineeproject_subject.apps.EdcAppointmentAppConfig',
     'traineeproject_subject.apps.EdcProtocolAppConfig',
     'traineeproject_subject.apps.EdcVisitTrackingAppConfig',
+    'traineeproject_subject.apps.EdcMetadataAppConfig',
     'traineeproject_subject.apps.EdcTimepointAppConfig',
     'traineeproject_subject.apps.AppConfig',
     'traineeproject_prn.apps.AppConfig',
