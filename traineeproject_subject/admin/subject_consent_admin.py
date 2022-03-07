@@ -107,7 +107,7 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdm
                     'user_modified')
     
     search_fields = ('subject_identifier','date_of_birth')
-    
+    readonly_fields = ('subject_identifier',)
     
     def get_actions(self, request):
 
@@ -147,3 +147,6 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdm
             'show_delete': True
         })
         return super().render_change_form(request, context, add, change, form_url, obj)
+  
+  
+    
