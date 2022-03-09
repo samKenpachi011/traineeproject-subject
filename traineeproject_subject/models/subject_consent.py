@@ -184,8 +184,8 @@ class SubjectConsent(
         return fields 
 
     def save(self, *args, **kwargs):
-        self.version = '1'  
         super().save(*args, **kwargs)
+        self.version = '1'  
 
         # screening_cls = django_apps.get_model(self.subject_screening_model)
         # try:

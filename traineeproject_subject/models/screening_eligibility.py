@@ -93,10 +93,11 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
         editable=False)
 
     history = HistoricalRecords()
+    
     objects = ScreeningEligibilityManager() 
 
     def __str__(self):
-        return self.screening_identifier
+        return f'{self.screening_identifier}, {self.subject_identifier}'
 
     def natural_key(self):
         return (self.screening_identifier,)
@@ -105,7 +106,7 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.append('screening_identifier')
+        fields.extend(['screening_identifier',])
         return fields
 
     def save(self, *args, **kwargs):  

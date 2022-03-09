@@ -20,7 +20,7 @@ class ScreeningEligibilityAdmin(admin.ModelAdmin):
 
     search_fields = ('screening_identifier',)    
     readonly_fields = ('screening_identifier',)
-    list_display = ('screening_identifier','age_in_years','is_eligible','reason_for_ineligibility')
+    list_display = ('screening_identifier','age_in_years','is_eligible','reason_for_ineligibility','is_consented')
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

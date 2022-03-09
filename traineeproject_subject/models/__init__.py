@@ -1,4 +1,3 @@
-import imp
 from .screening_eligibility import ScreeningEligibility
 from .subject_community_engagement import CommunityEngagementQuestionnaire
 from .subject_consent import SubjectConsent
@@ -7,3 +6,4 @@ from .subject_requisition import SubjectRequisition
 from .subject_visit import SubjectVisit
 from .subject_demographic import SubjectDemographicsQuestionnaire
 from .subject_personal_contact_info import PersonalContactInfo
+from .signals import subject_consent_on_post_save
