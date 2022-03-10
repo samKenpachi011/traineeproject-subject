@@ -13,8 +13,10 @@ from .onschedule import OnSchedule
 @receiver(post_save, weak=False, sender=SubjectConsent,
           dispatch_uid='subject_consent_on_post_save')
 def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
+    import pdb; pdb.set_trace()
     if not raw:
         if created:
+            
             
             # onschedule_obj = django_apps.get_model('traineeproject_subject.onschedule')  
             update_model_fields(instance=instance,

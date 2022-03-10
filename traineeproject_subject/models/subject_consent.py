@@ -23,21 +23,24 @@ from edc_consent.field_mixins import (IdentityFieldsMixin,
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_consent.validators import eligible_if_yes, FullNameValidator
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
+from edc_consent.managers import ConsentManager as SubjectConsentManager
 
 
 class SubjectScreeningError(Exception):
     pass
-class SubjectConsentManager(SearchSlugManager,models.Manager):
+
+class ConsentManager(SubjectConsentManager, SearchSlugManager):
     def get_by_natural(self, subject_identifier, version):
         return self.get(
             subject_identifier=subject_identifier, version=version)
         
 
-class SubjectConsent(ConsentModelMixin, SiteModelMixin,
-                      UpdatesOrCreatesRegistrationModelMixin,
-                      NonUniqueSubjectIdentifierModelMixin, IdentityFieldsMixin,
-                      PersonalFieldsMixin, VulnerabilityFieldsMixin,
-                      SearchSlugModelMixin, BaseUuidModel):
+class SubjectConsent(
+        ConsentModelMixin, SiteModelMixin,
+        UpdatesOrCreatesRegistrationModelMixin,
+        NonUniqueSubjectIdentifierModelMixin, IdentityFieldsMixin,
+        PersonalFieldsMixin, VulnerabilityFieldsMixin,
+        SearchSlugModelMixin, BaseUuidModel):
 
     subject_screening_model = 'traineeproject_subject.screeningeligibility'    
 
@@ -176,7 +179,7 @@ class SubjectConsent(ConsentModelMixin, SiteModelMixin,
         return f'{self.subject_identifier}  V{self.version}'
 
     def natural_key(self):
-        return (self.subject_identifier, self.version)   
+        return (self.subject_identifier, self.version,)   
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
@@ -185,8 +188,8 @@ class SubjectConsent(ConsentModelMixin, SiteModelMixin,
         return fields 
 
     def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
         self.version = '1' 
+        super().save(*args, **kwargs)
     
     def make_new_identifier(self):
         """Returns a new and unique identifier.
