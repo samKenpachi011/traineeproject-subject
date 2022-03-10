@@ -9,8 +9,7 @@ from edc_visit_schedule.model_mixins import OnScheduleModelMixin
 from edc_consent.model_mixins import RequiresConsentFieldsModelMixin
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
-
-class OnSchedule(RequiresConsentFieldsModelMixin, OnScheduleModelMixin, BaseUuidModel):
+class OnSchedule(OnScheduleModelMixin, BaseUuidModel):
 
     subject_identifier = models.CharField(
         verbose_name="Subject Identifier",
@@ -34,5 +33,6 @@ class OnSchedule(RequiresConsentFieldsModelMixin, OnScheduleModelMixin, BaseUuid
         self.consent_version = None
         super().save(*args, **kwargs)
 
-    class Meta:
-        unique_together = ('subject_identifier', 'schedule_name')
+    class Meta(OnScheduleModelMixin.Meta):
+        app_label = 'traineeproject_subject'
+        # unique_together = ('subject_identifier', 'schedule_name')

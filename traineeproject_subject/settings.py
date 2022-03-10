@@ -5,6 +5,7 @@
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR_OS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 # Quick-start development settings - unsuitable for production
@@ -62,6 +63,7 @@ INSTALLED_APPS = [
     'traineeproject_metadata_rules.apps.AppConfig',
     'traineeproject_validation.apps.AppConfig',
     'traineeproject_subject.apps.EdcAppointmentAppConfig',
+    'traineeproject_subject.apps.EdcFacilityAppConfig',
     'traineeproject_subject.apps.EdcProtocolAppConfig',
     'traineeproject_subject.apps.EdcVisitTrackingAppConfig',
     'traineeproject_subject.apps.EdcMetadataAppConfig',
@@ -161,6 +163,12 @@ STATIC_URL = 'static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+
+# holiday
+HOLIDAY_FILE = os.path.join(BASE_DIR_OS, 'holidays.csv')
+# edc facility
+COUNTRY = 'botswana'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DASHBOARD_URL_NAMES = {}

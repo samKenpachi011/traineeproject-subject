@@ -37,6 +37,8 @@ if settings.APP_NAME == 'traineeproject_subject':
     from edc_facility.apps import AppConfig as BaseEdcFacilityAppConfig
     from dateutil.relativedelta import MO, TU, WE, TH, FR, SA, SU
 
+    def ready(self):
+        from .models import subject_consent_on_post_save
 
     class EdcFacilityAppConfig(BaseEdcFacilityAppConfig):
         country = 'botswana'
@@ -80,9 +82,10 @@ if settings.APP_NAME == 'traineeproject_subject':
         ])
         
     class EdcVisitTrackingAppConfig(BaseEdcVisitTrackingAppConfig):
-        report_datetime_allowance = -1
+        # report_datetime_allowance = -1
         visit_models = {
-            'traineeproject_subject': ('subject_visit', 'traineeproject_subject.subjectvisit'), }    
+            'traineeproject_subject': (
+                'subject_visit', 'traineeproject_subject.subjectvisit')}    
         
     class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
         reason_field = {'training_subject.subjectvisit': 'reason'}

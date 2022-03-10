@@ -18,7 +18,8 @@ from django_crypto_fields.fields import FirstnameField, LastnameField, Encrypted
 # edc consent
 from edc_consent.model_mixins import ConsentModelMixin
 from edc_consent.managers import ConsentManager
-from edc_consent.field_mixins import IdentityFieldsMixin,IdentityFieldsMixinError
+from edc_consent.field_mixins import (IdentityFieldsMixin,                                  
+                                      PersonalFieldsMixin,VulnerabilityFieldsMixin)
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_consent.validators import eligible_if_yes, FullNameValidator
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
@@ -32,19 +33,19 @@ class SubjectConsentManager(SearchSlugManager,models.Manager):
             subject_identifier=subject_identifier, version=version)
         
 
-class SubjectConsent(
-        ConsentModelMixin,SiteModelMixin,
-        UpdatesOrCreatesRegistrationModelMixin,NonUniqueSubjectIdentifierModelMixin,IdentityFieldsMixin,
-        SearchSlugModelMixin,BaseUuidModel):
+class SubjectConsent(ConsentModelMixin, SiteModelMixin,
+                      UpdatesOrCreatesRegistrationModelMixin,
+                      NonUniqueSubjectIdentifierModelMixin, IdentityFieldsMixin,
+                      PersonalFieldsMixin, VulnerabilityFieldsMixin,
+                      SearchSlugModelMixin, BaseUuidModel):
 
-    subject_screening_model = 'traineeproject_subject.screening_eligibility'    
+    subject_screening_model = 'traineeproject_subject.screeningeligibility'    
 
     screening_identifier = models.CharField(
         max_length=50,
         verbose_name='Screening identifier',)
 
     # Demographic Details
-
  
     first_name = FirstnameField(
         null=True, blank=False)
@@ -185,21 +186,8 @@ class SubjectConsent(
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        self.version = '1'  
-
-        # screening_cls = django_apps.get_model(self.subject_screening_model)
-        # try:
-        #     screening_obj = screening_cls.objects.get(
-        #         screening_identifier=self.screening_identifier)
-        # except screening_cls.DoesNotExist:
-        #     raise SubjectScreeningError('Missing subject screening object for participant'
-        #                                 f'{self.subject_identifier}')
-        # else:
-        #     screening_obj.age_in_years = age(self.dob, get_utcnow())
-        #     screening_obj.save()
-        # self.subject_type = 'subject'
-        
-
+        self.version = '1' 
+    
     def make_new_identifier(self):
         """Returns a new and unique identifier.
         Override this if needed. Can be inherited from NonUniqueSubjectIdentifierModelMixin
@@ -218,10 +206,8 @@ class SubjectConsent(
     class Meta(ConsentModelMixin.Meta):
         app_label = 'traineeproject_subject'
         verbose_name = 'Subject Consent'
-        verbose_name_plural = 'Subject Consent'
         get_latest_by = 'consent_datetime'
         unique_together = (
             ('subject_identifier', 'version'),                       
-            ('subject_identifier', 'screening_identifier', 'version'),
             ('first_name', 'date_of_birth', 'initials', 'version'))
         ordering = ('-created',)
