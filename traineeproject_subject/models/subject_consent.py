@@ -161,5 +161,5 @@ class SubjectConsent(
         get_latest_by = 'consent_datetime'
         unique_together = (
             ('subject_identifier', 'version'),                       
-            ('first_name', 'date_of_birth', 'initials', 'version'))
+            ('first_name', 'dob', 'initials', 'version'))
         ordering = ('-created',)
