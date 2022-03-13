@@ -6,7 +6,6 @@ from edc_base.sites import CurrentSiteManager
 
 from edc_identifier.managers import SubjectIdentifierManager
 from edc_visit_schedule.model_mixins import OnScheduleModelMixin
-from edc_consent.model_mixins import RequiresConsentFieldsModelMixin
 from edc_visit_schedule.site_visit_schedules import site_visit_schedules
 
 class OnSchedule(OnScheduleModelMixin, BaseUuidModel):
@@ -35,4 +34,4 @@ class OnSchedule(OnScheduleModelMixin, BaseUuidModel):
 
     class Meta(OnScheduleModelMixin.Meta):
         app_label = 'traineeproject_subject'
-        # unique_together = ('subject_identifier', 'schedule_name')
+        unique_together = ('subject_identifier', 'schedule_name')
