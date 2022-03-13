@@ -55,8 +55,11 @@ class ModelAdminMixin(ModelAdminNextUrlRedirectMixin,ModelAdminFormAutoNumberMix
         return super().change_view(
             request, object_id, form_url=form_url, extra_context=extra_context)
 
+
 @admin.register(SubjectConsent, site=traineeproject_subject_admin)
-class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdmin):
+class SubjectConsentAdmin(ModelAdminBasicMixin,ModelAdminMixin,
+                          SimpleHistoryAdmin,
+                          admin.ModelAdmin):
     
     form = SubjectConsentForm
     fieldsets = (
@@ -79,9 +82,8 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdm
                 'currently_living_with',
                 'consent_to_participate',
                 'consent_to_optional_sample_collection',
-
             ),
-        }),
+        }),audit_fieldset_tuple
     )
 
     radio_fields = {
@@ -107,13 +109,13 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdm
                     'user_modified')
     
     search_fields = ('subject_identifier','date_of_birth')
-    readonly_fields = ('subject_identifier',)
+    # readonly_fields = ('subject_identifier',)
     
     def get_actions(self, request):
 
         super_actions = super().get_actions(request)
 
-        if ('esr21_subject.change_informedconsent'
+        if ('traineeproject_subject.change_informedconsent'
                 in request.user.get_group_permissions()):
 
             consent_actions = [
@@ -139,14 +141,5 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,SimpleHistoryAdmin,admin.ModelAdm
     def get_readonly_fields(self, request, obj=None):
         return super().get_readonly_fields(request, obj=obj) + audit_fields
     
-    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
-        context.update({
-            'show_save': True,
-            'show_save_and_continue': False,
-            'show_save_and_add_another': False,
-            'show_delete': True
-        })
-        return super().render_change_form(request, context, add, change, form_url, obj)
-  
-  
+
     

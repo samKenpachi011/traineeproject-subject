@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.sites.models import Site
+from simple_history.models import HistoricalRecords
 from django.utils.safestring import mark_safe
 from django_crypto_fields.fields import EncryptedCharField
 from edc_action_item.model_mixins import ActionModelMixin
@@ -72,6 +73,7 @@ class PersonalContactInfo(LocatorModelMixin,ActionModelMixin,SiteModelMixin,Base
         blank=True,
         null=True,)
 
+    history = HistoricalRecords()
     class Meta:
         app_label = 'traineeproject_subject'
         verbose_name = 'Personal Contact Information'

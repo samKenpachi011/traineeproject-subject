@@ -8,7 +8,7 @@ from edc_base.model_mixins import BaseUuidModel
 from edc_base.model_managers import HistoricalRecords
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierFieldMixin
 from edc_consent.model_mixins import RequiresConsentFieldsModelMixin
-from edc_visit_tracking.managers import CrfModelManager
+from edc_visit_tracking.managers import CrfModelManager as VisitTrackingCrfModelManager
 from edc_visit_tracking.model_mixins import CrfModelMixin as VisitTrackingCrfModelMixin,PreviousVisitModelMixin
 from edc_visit_schedule.model_mixins import SubjectScheduleCrfModelMixin
 from django.db.models.deletion import PROTECT
@@ -23,9 +23,7 @@ from ..choices import HUBS, ITEM_TYPE, PRIORITY,REASON_NOT_DRAWN
 from .subject_visit import SubjectVisit
 from edc_search.model_mixins import SearchSlugManager
 
-# TODO: add more modules for inheritance
-# NonUniqueSubjectIdentifierFieldMixin
-class SubjectRequisitionManager(CrfModelManager, SearchSlugManager):
+class SubjectRequisitionManager(VisitTrackingCrfModelManager, SearchSlugManager):
     pass
 class SubjectRequisition(
     NonUniqueSubjectIdentifierFieldMixin,
@@ -106,21 +104,15 @@ class SubjectRequisition(
         max_length=350,
         null=True,
         blank=True)  
-
+    
     object = SubjectRequisitionManager()
+    
     history = HistoricalRecords()    
 
     def __str__(self):
         return (
             f'{self.requisition_identifier} '
             f'{self.panel_object.verbose_name}')       
-
-    def get_search_slug_fields(self):
-        fields = super().get_search_slug_fields()
-        fields.extend([
-            'requisition_identifier',
-            'human_readable_identifier', 'identifier_prefix'])
-        return fields 
         
     def save(self, *args, **kwargs):
         if not self.id:
@@ -129,11 +121,17 @@ class SubjectRequisition(
             self.protocol_number = edc_protocol_app_config.protocol_number
         self.report_datetime = self.requisition_datetime
         self.subject_identifier = self.subject_visit.subject_identifier
-        self.consent_model = 'traineeproject_subject.subject_consent'
+        # self.consent_model = 'traineeproject_subject.subject_consent'
         super().save(*args, **kwargs)
            
+           
+    def get_search_slug_fields(self):
+        fields = super().get_search_slug_fields()
+        fields.extend([
+            'requisition_identifier',
+            'human_readable_identifier', 'identifier_prefix'])
+        return fields        
     class Meta:
         app_label = 'traineeproject_subject'
         verbose_name = 'Subject Requisition'
-        verbose_name_plural = 'Subject Requisition'
         unique_together = ('panel', 'subject_visit')

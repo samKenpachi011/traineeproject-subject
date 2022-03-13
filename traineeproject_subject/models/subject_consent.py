@@ -34,6 +34,9 @@ class ConsentManager(SubjectConsentManager, SearchSlugManager):
         return self.get(
             subject_identifier=subject_identifier, version=version)
         
+    class Meta:
+        abstract = True    
+        
 
 class SubjectConsent(
         ConsentModelMixin, SiteModelMixin,
@@ -47,15 +50,6 @@ class SubjectConsent(
     screening_identifier = models.CharField(
         max_length=50,
         verbose_name='Screening identifier',)
-
-    # Demographic Details
- 
-    first_name = FirstnameField(
-        null=True, blank=False)
-
-    last_name = LastnameField(
-        verbose_name="Last name",
-        null=True, blank=False)
 
     consent_datetime = models.DateTimeField(
         verbose_name='Consent date and time',

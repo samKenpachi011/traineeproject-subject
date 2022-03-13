@@ -2,13 +2,14 @@ from django.db import models
 from ..choices import ACTIVITY_STATUS, ELECTION_PARTICIPATION, NEIGHBOURHOOD_PROBLEMS,ADULT_PARTICIPATION
 from edc_constants.constants import NOT_APPLICABLE
 from edc_search.model_mixins import SearchSlugManager
+from .model_mixins import CrfModelMixin
 
 class CommunityEngagementQuestionnaireManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, subject_identifier, version):
         return self.get(
             subject_identifier=subject_identifier, version=version)
-class CommunityEngagementQuestionnaire(models.Model):
+class CommunityEngagementQuestionnaire(CrfModelMixin):
 
     report_datetime = models.DateTimeField(
         verbose_name='Report Date and Time',

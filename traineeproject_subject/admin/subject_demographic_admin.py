@@ -5,12 +5,13 @@ from ..admin_site import traineeproject_subject_admin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 from .modeladmin_mixins import CrfModelAdminMixin
 
+
 @admin.register(SubjectDemographicsQuestionnaire, site=traineeproject_subject_admin)
 class DemographicsQuestionnaireAdmin(CrfModelAdminMixin, admin.ModelAdmin):
     form = DemographicQuetionnaireForm
     fieldsets = (
-        (None, {          
-            'fields':[
+        (None, {
+            'fields': [
                 'subject_visit',
                 'report_datetime',
                 'country',
@@ -25,9 +26,8 @@ class DemographicsQuestionnaireAdmin(CrfModelAdminMixin, admin.ModelAdmin):
                 'marital_status_other',
                 'running_water',
             ]}
-            ),audit_fieldset_tuple
-            )
-    
+         ), audit_fieldset_tuple
+    )
 
     def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
         context.update({

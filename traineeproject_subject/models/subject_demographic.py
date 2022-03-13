@@ -1,9 +1,11 @@
 from django.db import models
-from .model_mixins import CrfModelMixin 
+from .model_mixins import CrfModelMixin
 from django_countries.fields import CountryField
 from edc_base.model_fields import OtherCharField
 from edc_constants.choices import YES_NO
 from ..choices import ETHNICITY, HIGHEST_EDUCATION, MARITAL_STATUS, TYPE_OF_WORK, SETTLEMENT_TYPE
+
+
 class SubjectDemographicsQuestionnaire(CrfModelMixin):
 
     country = CountryField()

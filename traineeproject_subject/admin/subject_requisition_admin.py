@@ -3,10 +3,17 @@ from ..admin_site import traineeproject_subject_admin
 from ..models import SubjectRequisition
 from ..forms import SubjectRequisitionForm
 from edc_model_admin import audit_fieldset_tuple
-# from .modeladmin_mixins import CrfModelAdminMixin
+from .modeladmin_mixins import CrfModelAdminMixin
+from edc_lab.admin import (RequisitionAdminMixin,
+                           requisition_fieldset,
+                           requisition_status_fieldset,
+                           requisition_identifier_fieldset,
+                           requisition_identifier_fields,
+                           requisition_verify_fields,
+                           requisition_verify_fieldset)
 
 @admin.register(SubjectRequisition, site=traineeproject_subject_admin)
-class SubjectRequisitionAdmin(admin.ModelAdmin):
+class SubjectRequisitionAdmin(CrfModelAdminMixin, RequisitionAdminMixin, admin.ModelAdmin):
 
     form = SubjectRequisitionForm
     ordering = ('requisition_identifier',)
@@ -29,8 +36,11 @@ class SubjectRequisitionAdmin(admin.ModelAdmin):
                 'urgent_specify',
                 'comments',)
                 }),
-        audit_fieldset_tuple
-            )
+        requisition_fieldset,
+        requisition_status_fieldset,
+        requisition_identifier_fieldset,
+        requisition_verify_fieldset,
+        audit_fieldset_tuple)
 
 
     radio_fields = {
@@ -38,16 +48,11 @@ class SubjectRequisitionAdmin(admin.ModelAdmin):
         'reason_not_drawn': admin.VERTICAL,
         'item_type': admin.VERTICAL,
         'priority': admin.VERTICAL,
-        'study_site': admin.VERTICAL,
     }
 
     list_display = ('subject_visit', 'is_drawn', 'panel', 'estimated_volume',)
 
-    def render_change_form(self, request, context, add=False, change=False, form_url='', obj=None):
-        context.update({
-            'show_save': True,
-            'show_save_and_continue': False,
-            'show_save_and_add_another': False,
-            'show_delete': True
-        })
-        return super().render_change_form(request, context, add, change, form_url, obj)
+    def get_readonly_fields(self, request, obj=None):
+        return (super().get_readonly_fields(request, obj)
+                +requisition_identifier_fields
+                +requisition_verify_fields)

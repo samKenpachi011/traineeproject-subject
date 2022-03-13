@@ -1,9 +1,6 @@
-from django import forms
-from django import forms
 from ..models import EducationQuestionnaire
-from edc_base.sites import SiteModelFormMixin
-
-class EducationQuestionnaireForm(SiteModelFormMixin,forms.ModelForm):
+from .form_mixins import SubjectModelFormMixin
+class EducationQuestionnaireForm(SubjectModelFormMixin):
 
     class Meta:
         model = EducationQuestionnaire

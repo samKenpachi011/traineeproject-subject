@@ -4,10 +4,11 @@ from edc_model_admin import audit_fieldset_tuple
 from ..admin_site import traineeproject_subject_admin
 from .modeladmin_mixins import ModelAdminMixin
 from ..models import PersonalContactInfo
+from simple_history.admin import SimpleHistoryAdmin
 from ..forms import PersonalContactInfoForm
 
 @admin.register(PersonalContactInfo, site=traineeproject_subject_admin)
-class PersonalContactInfoAdmin(ModelAdminMixin, admin.ModelAdmin):
+class PersonalContactInfoAdmin(ModelAdminMixin,SimpleHistoryAdmin, admin.ModelAdmin):
     form = PersonalContactInfoForm
 
     fieldsets = (

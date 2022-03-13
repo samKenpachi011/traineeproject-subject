@@ -3,9 +3,12 @@ from ..admin_site import traineeproject_subject_admin
 from ..models import EducationQuestionnaire
 from ..forms import EducationQuestionnaireForm
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
+from simple_history.admin import SimpleHistoryAdmin
+  
+
 
 @admin.register(EducationQuestionnaire, site=traineeproject_subject_admin)
-class EducationQuestionnaireAdmin(admin.ModelAdmin):
+class EducationQuestionnaireAdmin(SimpleHistoryAdmin):
 
     form = EducationQuestionnaireForm
     fieldset = (
