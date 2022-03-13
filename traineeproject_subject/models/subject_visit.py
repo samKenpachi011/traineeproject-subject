@@ -6,11 +6,15 @@ from edc_reference.model_mixins import ReferenceModelMixin
 from edc_appointment.models import Appointment
 from edc_visit_tracking.managers import VisitModelManager
 from edc_visit_tracking.model_mixins import VisitModelMixin
-from edc_base.sites import CurrentSiteManager
+from edc_base.sites import CurrentSiteManager as BaseCurrentManager
 from edc_base.model_managers import HistoricalRecords
 from edc_metadata.model_mixins.creates import CreatesMetadataModelMixin
 from ..choices import VISIT_REASON, VISIT_INFO_SOURCE
 
+
+
+class CurrentSiteManager(VisitModelManager,BaseCurrentManager):
+    pass
 class SubjectVisit(VisitModelMixin, CreatesMetadataModelMixin, ReferenceModelMixin,
                    SiteModelMixin, RequiresConsentFieldsModelMixin, BaseUuidModel):
 
