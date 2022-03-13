@@ -3,6 +3,7 @@ from ..choices import ACTIVITY_STATUS, ELECTION_PARTICIPATION, NEIGHBOURHOOD_PRO
 from edc_constants.constants import NOT_APPLICABLE
 from edc_search.model_mixins import SearchSlugManager
 from .model_mixins import CrfModelMixin
+from .subject_visit import SubjectVisit
 
 class CommunityEngagementQuestionnaireManager(SearchSlugManager, models.Manager):
 
@@ -10,6 +11,8 @@ class CommunityEngagementQuestionnaireManager(SearchSlugManager, models.Manager)
         return self.get(
             subject_identifier=subject_identifier, version=version)
 class CommunityEngagementQuestionnaire(CrfModelMixin):
+    
+    subject_visit = models.ForeignKey(SubjectVisit, on_delete=models.DO_NOTHING)
 
     report_datetime = models.DateTimeField(
         verbose_name='Report Date and Time',

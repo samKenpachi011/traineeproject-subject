@@ -23,7 +23,7 @@ class VersionControlMixin:
 
     def get_form_version(self, request):
 
-        form_versions = django_apps.get_app_config('esr21_subject').form_versions
+        form_versions = django_apps.get_app_config('traineeproject_subject').form_versions
 
         queryset = self.get_queryset(request)
         model_name = queryset.model._meta.label_lower

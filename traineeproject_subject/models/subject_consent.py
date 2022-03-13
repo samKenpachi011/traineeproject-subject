@@ -1,5 +1,6 @@
 from django.db import models
 from django.apps import apps as django_apps
+from django.conf import settings
 from django.core.validators import RegexValidator
 from django.utils.safestring import mark_safe
 from ..choices import (GENDER_OTHER, MARITAL_STATUS,LIVING_WITH,LANGUAGES, 
@@ -11,7 +12,7 @@ from edc_base.model_mixins import BaseUuidModel
 from edc_base.sites import SiteModelMixin
 from edc_base.utils import get_utcnow,age
 from edc_base.model_fields import IsDateEstimatedField
-from edc_constants.choices import YES_NO
+from edc_constants.choices import YES_NO, YES_NO_NA
 from edc_constants.constants import NO
 from edc_search.model_mixins import SearchSlugManager
 from django_crypto_fields.fields import FirstnameField, LastnameField, EncryptedCharField,IdentityField
@@ -22,8 +23,11 @@ from edc_consent.field_mixins import (IdentityFieldsMixin,
                                       PersonalFieldsMixin,VulnerabilityFieldsMixin)
 from edc_identifier.model_mixins import NonUniqueSubjectIdentifierModelMixin
 from edc_consent.validators import eligible_if_yes, FullNameValidator
+from edc_consent.field_mixins import (SampleCollectionFieldsMixin,ReviewFieldsMixin,CitizenFieldsMixin)
 from edc_registration.model_mixins import UpdatesOrCreatesRegistrationModelMixin
 from edc_consent.managers import ConsentManager as SubjectConsentManager
+from edc_base.model_validators.date import datetime_not_future
+from edc_protocol.validators import datetime_not_before_study_start
 
 
 class SubjectScreeningError(Exception):
@@ -39,13 +43,14 @@ class ConsentManager(SubjectConsentManager, SearchSlugManager):
         
 
 class SubjectConsent(
-        ConsentModelMixin, SiteModelMixin,
+        ConsentModelMixin, SiteModelMixin, SampleCollectionFieldsMixin,
         UpdatesOrCreatesRegistrationModelMixin,
-        NonUniqueSubjectIdentifierModelMixin, IdentityFieldsMixin,
-        PersonalFieldsMixin, VulnerabilityFieldsMixin,
-        SearchSlugModelMixin, BaseUuidModel):
+        NonUniqueSubjectIdentifierModelMixin,
+        IdentityFieldsMixin, ReviewFieldsMixin, PersonalFieldsMixin,
+        CitizenFieldsMixin, SearchSlugModelMixin, BaseUuidModel):
 
-    subject_screening_model = 'traineeproject_subject.screeningeligibility'    
+    subject_screening_model = 'traineeproject_subject.screeningeligibility'  
+
 
     screening_identifier = models.CharField(
         max_length=50,
@@ -56,111 +61,61 @@ class SubjectConsent(
         default=get_utcnow,
         help_text='Date and time of consent.')  
 
-    initials = EncryptedCharField(
-        validators=[RegexValidator(
-            regex=r'^[A-Z]{2,3}$',
-            message=('Ensure initials consist of letters '
-                     'only in upper case, no spaces.'))],
-        null=True, blank=False)   
 
+    identity_type = models.CharField(
+        verbose_name='What type of identity number is this?',
+        max_length=25,
+        choices=IDENTITY_TYPE)
 
     language = models.CharField(
-        max_length=50,
         verbose_name='Language of consent',
-        choices=LANGUAGES,
+        max_length=50,
+        choices=settings.LANGUAGES,
         null=True,
         blank=True,
         help_text=(
             'The language used for the consent process will '
-            'also be used during data collection.')) 
+            'also be used during data collection.')
+    )
 
-    is_literate = models.CharField(
+    consent_reviewed = models.CharField(
+        verbose_name='I have reviewed the consent with the participant',
         max_length=3,
-        verbose_name='Is the participant literate?',
         choices=YES_NO,
-        help_text=('If \'No\' provide witness\'s name on this '
-                   'form and signature on the paper document.'),
-        default=NO,)
-
-    witness_name = LastnameField(
-        verbose_name='Witness\'s last and first name',
-        validators=[FullNameValidator()],
-        blank=True,
-        null=True,
-        help_text=mark_safe(
-            'Required only if participant is illiterate.<br>'
-            'Format is \'LASTNAME, FIRSTNAME\'. '
-            'All uppercase separated by a comma.'),
-    )        
-
-    gender = models.CharField(
-        max_length=6,
-        verbose_name='Gender',
-        help_text='Participant Gender',
-        choices=GENDER_OTHER,
-        null=True,
-        blank=False)
-
-    other_gender = models.CharField(
-        max_length=100,
-        verbose_name='If other specify...',
-        null=True)    
-    
-    date_of_birth = models.DateField(
-        verbose_name="Date of birth",
-        null=True,
-        blank=False)
-
-    is_dob_estimated = IsDateEstimatedField(
-        verbose_name="Is date of birth estimated?",
-        null=True,
-        blank=False)
-
-    marital_status = models.CharField(
-        max_length=8,
-        choices=MARITAL_STATUS,
-        verbose_name='What is your marital status?',
-        default='---------',
-        )  
-
-    partner_count = models.PositiveIntegerField(
-        verbose_name='Number of Partners?',
-        null=True
-        )
-
-    currently_living_with = models.CharField(
-        max_length=20,
-        verbose_name='Who do you currently live with?',
-        choices=LIVING_WITH,
-        default='---------')
-
-    identity = IdentityField(
-        verbose_name='Identity number')
-
-    identity_type = models.CharField(
-        max_length=20,
-        verbose_name='What type of identity number is this?',
-        choices=IDENTITY_TYPE,
-        default='---------',) 
-
-    confirm_identity = IdentityField(
-        help_text='Retype the identity number',
-        null=True,
-        blank=False)    
-
-    consent_to_participate = models.CharField(
-        max_length=3,
-        verbose_name='Do you consent to participate in the study?',
-        choices=YES_NO,    
         validators=[eligible_if_yes, ],
-        help_text='Participant is not eligible if no',
-        default=NO)    
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
 
-    consent_to_optional_sample_collection = models.CharField(
+    study_questions = models.CharField(
+        verbose_name=(
+            'I have answered all questions the participant had about the study'),
         max_length=3,
-        verbose_name='Do you consent to optional sample collection?',
         choices=YES_NO,
-        default=NO) 
+        validators=[eligible_if_yes, ],
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
+
+    assessment_score = models.CharField(
+        verbose_name=(
+            'I have asked the participant questions about this study and '
+            'the participant has demonstrated understanding'),
+        max_length=3,
+        choices=YES_NO,
+        validators=[eligible_if_yes, ],
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
+
+    verbal_script = models.CharField(
+        verbose_name=('I have documented participant\'s details on the verbal '
+                      'script, and signed electronically'),
+        max_length=15,
+        choices=YES_NO_NA,
+        null=True,
+        blank=False,
+        help_text='If no, participant is not eligible.')
 
 
     objects = SubjectConsentManager()

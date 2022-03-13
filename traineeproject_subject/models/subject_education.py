@@ -16,7 +16,7 @@ class EducationQuestionnaireManager(SearchSlugManager, models.Manager):
 
 class EducationQuestionnaire(CrfModelMixin):
     
-    subject_visit = models.ForeignKey(SubjectVisit, on_delete=models.PROTECT)
+    subject_visit = models.ForeignKey(SubjectVisit, on_delete=models.DO_NOTHING)
 
     employment_status = models.CharField(
         max_length=6,
