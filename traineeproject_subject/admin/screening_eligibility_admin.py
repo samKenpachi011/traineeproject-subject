@@ -3,9 +3,10 @@ from django.contrib import admin
 from ..forms import ScreeningEligibilityForm
 from ..models import ScreeningEligibility
 from ..admin_site import traineeproject_subject_admin
+from .modeladmin_mixins import ModelAdminMixin
 from edc_model_admin.model_admin_audit_fields_mixin import audit_fieldset_tuple
 @admin.register(ScreeningEligibility, site=traineeproject_subject_admin)
-class ScreeningEligibilityAdmin(admin.ModelAdmin):
+class ScreeningEligibilityAdmin(ModelAdminMixin, admin.ModelAdmin):
 
     form = ScreeningEligibilityForm
     fieldset = (

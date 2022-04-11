@@ -16,7 +16,10 @@ class ScreeningEligibilityManager(SearchSlugManager, models.Manager):
 
     def get_by_natural_key(self, screening_identifier):
         return self.get(screening_identifier=screening_identifier)
-class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,SearchSlugModelMixin,BaseUuidModel):
+class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,
+                           SiteModelMixin,
+                           SearchSlugModelMixin,
+                           BaseUuidModel):
     
     identifier_cls = ScreeningIdentifier
     
@@ -27,7 +30,7 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
 
     screening_identifier = models.CharField(
         editable=False,
-        verbose_name='Screening Eligibility Identifier',
+        verbose_name='Eligibility Identifier',
         max_length=36,
         blank=True,
         unique=True,)
@@ -97,7 +100,7 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
     objects = ScreeningEligibilityManager() 
 
     def __str__(self):
-        return f'{self.screening_identifier}, {self.subject_identifier}'
+        return f'{self.screening_identifier}'
 
     def natural_key(self):
         return (self.screening_identifier,)
@@ -106,7 +109,7 @@ class ScreeningEligibility(NonUniqueSubjectIdentifierFieldMixin,SiteModelMixin,S
 
     def get_search_slug_fields(self):
         fields = super().get_search_slug_fields()
-        fields.extend(['screening_identifier',])
+        fields.append('screening_identifier')
         return fields
 
     def save(self, *args, **kwargs):  

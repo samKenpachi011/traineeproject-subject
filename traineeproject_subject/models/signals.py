@@ -13,12 +13,9 @@ from .onschedule import OnSchedule
 @receiver(post_save, weak=False, sender=SubjectConsent,
           dispatch_uid='subject_consent_on_post_save')
 def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
-    import pdb; pdb.set_trace()
     if not raw:
-        if created:
+        if created:   
             
-            
-            # onschedule_obj = django_apps.get_model('traineeproject_subject.onschedule')  
             update_model_fields(instance=instance,
                                 model_cls=ScreeningEligibility,
                                 fields=[['subject_identifier',instance.subject_identifier],
@@ -61,22 +58,28 @@ def subject_consent_on_post_save(sender, instance, raw, created, **kwargs):
 def put_on_schedule(schedule_name,onschedule_model,instance=None):
     
     if instance:
-        _, schedule = site_visit_schedules.get_by_onschedule_model(onschedule_model)
+        import pdb;pdb.set_trace()
+        _, schedule = site_visit_schedules.get_by_onschedule_model(onschedule_model=onschedule_model)
         
         onschedule_model_cls = django_apps.get_model(onschedule_model)       
+        schedule.put_on_schedule(
+            subject_identifier=instance.subject_identifier,
+            onschedule_datetime=instance.consent_datetime)
+        
         try:
-            onschedule_model_cls.objects.get(
+            onschedule_obj = OnSchedule.objects.get(
             subject_identifier=instance.subject_identifier,
             schedule_name=schedule_name)
         except onschedule_model_cls.DoesNotExist: 
             schedule.put_on_schedule(
-            subject_identifier=instance.subject_identifier,
-            onschedule_datetime=instance.consent_datetime,
-            schedule_name=schedule_name)      
-        else:
-            schedule.refresh_schedule(
                 subject_identifier=instance.subject_identifier,
-                schedule_name=schedule_name)
+                onschedule_datetime=instance.consent_datetime,
+                schedule_name=schedule_name)      
+        else:
+            # schedule.refresh_schedule(
+            #     subject_identifier=instance.subject_identifier,
+            #     schedule_name=schedule_name)
+            onschedule_obj.save()
             
 def update_model_fields(instance=None, model_cls=None, fields=None):
     try:

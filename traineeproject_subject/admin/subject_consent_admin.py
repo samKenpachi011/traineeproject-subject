@@ -102,8 +102,8 @@ class SubjectConsentAdmin(ModelAdminBasicMixin,ModelAdminMixin,
                     'user_created',
                     'user_modified')
     
-    search_fields = ('subject_identifier','date_of_birth')
-    # readonly_fields = ('subject_identifier',)
+    search_fields = ('subject_identifier','dob')
+    readonly_fields = ('subject_identifier',)
     
     def get_actions(self, request):
 

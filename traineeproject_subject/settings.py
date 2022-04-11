@@ -3,6 +3,7 @@
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 #BASE_DIR = Path(__file__).resolve().parent.parent
 import os
+import sys
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_DIR_OS = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -179,3 +180,17 @@ COUNTRY = 'botswana'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 DASHBOARD_URL_NAMES = {}
+
+if 'test' in sys.argv:
+    class DisableMigrations:
+
+        def __contains__(self, item):
+            return True
+
+        def __getitem__(self, item):
+            return None
+
+
+    MIGRATION_MODULES = DisableMigrations()
+    PASSWORD_HASHERS = ('django.contrib.auth.hashers.MD5PasswordHasher',)
+    DEFAULT_FILE_STORAGE = 'inmemorystorage.InMemoryStorage'

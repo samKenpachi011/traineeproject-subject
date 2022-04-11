@@ -51,7 +51,6 @@ class SubjectConsent(
 
     subject_screening_model = 'traineeproject_subject.screeningeligibility'  
 
-
     screening_identifier = models.CharField(
         max_length=50,
         verbose_name='Screening identifier',)

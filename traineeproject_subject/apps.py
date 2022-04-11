@@ -88,7 +88,7 @@ if settings.APP_NAME == 'traineeproject_subject':
                 'subject_visit', 'traineeproject_subject.subjectvisit')}    
         
     class EdcMetadataAppConfig(BaseEdcMetadataAppConfig):
-        reason_field = {'training_subject.subjectvisit': 'reason'}
+        reason_field = {'traineeproject_subject.subjectvisit': 'reason'}
         create_on_reasons = [SCHEDULED, UNSCHEDULED, COMPLETED_PROTOCOL_VISIT]
         delete_on_reasons = [LOST_VISIT, MISSED_VISIT, FAILED_ELIGIBILITY]    
         
